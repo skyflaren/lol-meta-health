@@ -31,7 +31,20 @@ Notably we don't store the result of the games, as we don't care which character
 
 here is one game from the dataset, note how the champions are arranged.
 
-'| gameid                |   patch | champion   | ban1   | ban2    | ban3   | ban4   | ban5   |\n|:----------------------|--------:|:-----------|:-------|:--------|:-------|:-------|:-------|\n| ESPORTSTMNT06_2753012 |   13.01 | Jax        | Sylas  | Caitlyn | Wukong | Akali  | Yone   |\n| ESPORTSTMNT06_2753012 |   13.01 | Poppy      | Sylas  | Caitlyn | Wukong | Akali  | Yone   |\n| ESPORTSTMNT06_2753012 |   13.01 | Taliyah    | Sylas  | Caitlyn | Wukong | Akali  | Yone   |\n| ESPORTSTMNT06_2753012 |   13.01 | Ezreal     | Sylas  | Caitlyn | Wukong | Akali  | Yone   |\n| ESPORTSTMNT06_2753012 |   13.01 | Karma      | Sylas  | Caitlyn | Wukong | Akali  | Yone   |\n| ESPORTSTMNT06_2753012 |   13.01 | Sejuani    | Galio  | Lucian  | Fiora  | Viktor | Azir   |\n| ESPORTSTMNT06_2753012 |   13.01 | Viego      | Galio  | Lucian  | Fiora  | Viktor | Azir   |\n| ESPORTSTMNT06_2753012 |   13.01 | Syndra     | Galio  | Lucian  | Fiora  | Viktor | Azir   |\n| ESPORTSTMNT06_2753012 |   13.01 | Zeri       | Galio  | Lucian  | Fiora  | Viktor | Azir   |\n| ESPORTSTMNT06_2753012 |   13.01 | Yuumi      | Galio  | Lucian  | Fiora  | Viktor | Azir   |\n| ESPORTSTMNT06_2753012 |   13.01 | nan        | Sylas  | Caitlyn | Wukong | Akali  | Yone   |\n| ESPORTSTMNT06_2753012 |   13.01 | nan        | Galio  | Lucian  | Fiora  | Viktor | Azir   |'
+| gameid                |   patch | champion   | ban1   | ban2    | ban3   | ban4   | ban5   |
+|:----------------------|--------:|:-----------|:-------|:--------|:-------|:-------|:-------|
+| ESPORTSTMNT06_2753012 |   13.01 | Jax        | Sylas  | Caitlyn | Wukong | Akali  | Yone   |
+| ESPORTSTMNT06_2753012 |   13.01 | Poppy      | Sylas  | Caitlyn | Wukong | Akali  | Yone   |
+| ESPORTSTMNT06_2753012 |   13.01 | Taliyah    | Sylas  | Caitlyn | Wukong | Akali  | Yone   |
+| ESPORTSTMNT06_2753012 |   13.01 | Ezreal     | Sylas  | Caitlyn | Wukong | Akali  | Yone   |
+| ESPORTSTMNT06_2753012 |   13.01 | Karma      | Sylas  | Caitlyn | Wukong | Akali  | Yone   |
+| ESPORTSTMNT06_2753012 |   13.01 | Sejuani    | Galio  | Lucian  | Fiora  | Viktor | Azir   |
+| ESPORTSTMNT06_2753012 |   13.01 | Viego      | Galio  | Lucian  | Fiora  | Viktor | Azir   |
+| ESPORTSTMNT06_2753012 |   13.01 | Syndra     | Galio  | Lucian  | Fiora  | Viktor | Azir   |
+| ESPORTSTMNT06_2753012 |   13.01 | Zeri       | Galio  | Lucian  | Fiora  | Viktor | Azir   |
+| ESPORTSTMNT06_2753012 |   13.01 | Yuumi      | Galio  | Lucian  | Fiora  | Viktor | Azir   |
+| ESPORTSTMNT06_2753012 |   13.01 | nan        | Sylas  | Caitlyn | Wukong | Akali  | Yone   |
+| ESPORTSTMNT06_2753012 |   13.01 | nan        | Galio  | Lucian  | Fiora  | Viktor | Azir   |
 
 ---
 
