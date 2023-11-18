@@ -1,20 +1,35 @@
-# My Project Title
+# League Meta Health
 
-by Suraj Rampure (rampure@ucsd.edu)
-
-***Note***: If you choose a repo name and title as uninspired as the ones here, I will be quite sad.
+by Lukas Fullner, Justin Lu
 
 ---
 
 ## Introduction
-
-In this project, we studied the effectiveness of spice challenges in building team morale.
 
 ---
 
 ## Cleaning and EDA
 
 <iframe src="assets/10-80-enrollment.html" width=800 height=600 frameBorder=0></iframe>
+
+Our dataset given was a collection of tournament results across the year 2023, containing match information from many major
+tournaments throughout the year.  The dataset has many columns about various game stats, but we cut it down to:
+
+- `"gameid"`: A unique id for every game played.  this is useful because each game has 10 players, but there are actually
+  12 rows per game, so knowing the game id helps us parse the actual unique characters.
+- `"patch"`: This is a float representing what version of the game the competition is played on, ranging from 13.01 to 13.21
+  with some missing patches.  We compute meta health per patch then average the changes between them as our statistic.
+- `"champion"`: This represents what champion a player picked.  Notably rows 11 and 12 per game are null as these just store
+  bans
+- `"ban1"`: This is the first champion banned by each team, and is the same for rows 1-5 and 6-10 per game.
+- `"ban2"`: Same as `"ban1"` but for the second ban.
+- `"ban3"`: Same as `"ban1"` but for the third ban.
+- `"ban4"`: Same as `"ban1"` but for the fourth ban.
+- `"ban5"`: Same as `"ban1"` but for the fifth ban.
+
+Notably we don't store the result of the games, as we don't care which characters are winning and losing, just that characters are being represented.
+
+here is one game from the dataset, note how the champions are arranged.
 
 ---
 
