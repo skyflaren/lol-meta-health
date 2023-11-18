@@ -10,8 +10,6 @@ by Lukas Fullner, Justin Lu
 
 ## Cleaning and EDA
 
-<iframe src="assets/10-80-enrollment.html" width=800 height=600 frameBorder=0></iframe>
-
 Our dataset given was a collection of tournament results across the year 2023, containing match information from many major
 tournaments throughout the year.  The dataset has many columns about various game stats, but we cut it down to:
 
@@ -45,6 +43,10 @@ here is one game from the dataset, note how the champions are arranged.
 | ESPORTSTMNT06_2753012 |   13.01 | Yuumi      | Galio  | Lucian  | Fiora  | Viktor | Azir   |
 | ESPORTSTMNT06_2753012 |   13.01 | nan        | Sylas  | Caitlyn | Wukong | Akali  | Yone   |
 | ESPORTSTMNT06_2753012 |   13.01 | nan        | Galio  | Lucian  | Fiora  | Viktor | Azir   |
+
+In computing our test statistic later we will count the champions in rows 1-10, then all the bans from rows 11 and 12.
+
+<iframe src="assets/univariate.html" width=800 height=600 frameBorder=0></iframe>
 
 ---
 
