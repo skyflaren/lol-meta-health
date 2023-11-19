@@ -3,5 +3,6 @@ description: An in-depth look at the per-patch meta health of competitive League
 
 url: '/lol-meta-health'
 remote_theme: pages-themes/tactile@v0.2.0
+repository: 'skyflaren/lol-meta-health'
 plugins:
 - jekyll-remote-theme
