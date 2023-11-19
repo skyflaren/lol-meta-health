@@ -6,11 +6,11 @@ by Lukas Fullner (lfullner@ucsd.edu) and Justin Lu (jzlu@ucsd.edu)
 
 This study looks into the idea of a "meta" and its health in the competitive video game scene of League of Legends. More specifically, are the patch updates that Riot Games (the game developer) publishes making the meta healthier?
 
-Just like how different athletes have different strengths in physical sports, "champions" with unique capabilities have different relative strengths to one another in esports. In League of Legends, each player chooses one champion to play, which is often oe of the most influential choices they can make. Naturally, players will try to find the best champion at any given time in order to give them the greatest chance to win. This leads to a "meta" (or "most efficient tactic available"), which is a term referring to the best options available to a player. Our goal with this project was to answer the question of how healthy the meta is, but how does one even define meta health?  
+Just like how different athletes have different strengths in physical sports, "champions" with unique capabilities have different relative strengths to one another in esports. In League of Legends, each player chooses one champion to play, which is often one of the most influential choices they can make. In professional play, teams of 5 players each must take turns choosing their champions, where only one team can pick any given champion out of the 165 total available. In this process called a "draft", each team can also ban 5 champions, meaning both teams cannot pick them. Teams take turns picking and banning, ultimately resulting in 10 unique champions chosen and 10 unique champions banned. 
 
-In professional play, teams of 5 players each must take turns choosing their champions, where only one team can pick any given champion out of the 165 total available. In this process called a "draft", each team can also ban 5 champions, meaning both teams cannot pick them. Teams take turns picking and banning, ultimately resulting in 10 unique champions chosen and 10 unique champions banned. 
+Naturally, both professional and casual players will try to find the best champion at any given time in order to give them the greatest chance to win. This leads to a "meta" (or "most efficient tactic available"), which is a term referring to the best options available to a player. Our goal with this project was to answer the question of how healthy the meta is, but how does one even define meta health?  
 
-Thus, we chose to define our statistic as: a healthy meta is one where the largest quantity of characters are seen as strong enough for professinal play. We can determine this figure by using "meta presence", which represents how often a character appears as either picked and banned. More specifically we computed this term by counting every occurance of a character in a given period, then dividing that by the total number of characters picked and banned in that time period.
+Since there are so many champions available, but so few slots for presence in a game, we chose to define our statistic as where: a healthy meta is one where the largest quantity of characters are seen as strong enough for professinal play. We can determine this figure by using "meta presence", which represents how often a character appears as either picked and banned. More specifically we computed this term by counting every occurance of a character in a given period, then dividing that by the total number of characters picked and banned in that time period. Then, we looked at how much of the total presence did the top 50 champions comprise, where lower numbers are healthier.
 
 So what time period are we using? Every year, Riot Games (the game developer) will monitor the relative strength of each character, and tune their abilities to hopefully be more in line with the others, aka keeping the meta healthy. To both accomplish their goal of consistent maintenance, but also not change things so fast that players can't keep up, they "patch" the game about once every 2-3 weeks. During this time, players adapt and learn the new changes, and try to reestablish what the strongest champion picks are.
 
@@ -20,15 +20,11 @@ To conclude, we will be examining how a meta (the set of champions that is prese
 
 ## Cleaning and EDA
 
-Our dataset given was a collection of tournament results across the year 2023, containing match information from many major
-tournaments throughout the year.  The dataset has many columns about various game stats, but we cut it down to:
+Our dataset given was a collection of tournament results across the year 2023, containing match information from many major tournaments throughout the year.  The dataset has many columns about various game stats, but we cut it down to:
 
-- `"gameid"`: A unique id for every game played.  this is useful because each game has 10 players, but there are actually
-  12 rows per game, so knowing the game id helps us parse the actual unique characters.
-- `"patch"`: This is a float representing what version of the game the competition is played on, ranging from 13.01 to 13.21
-  with some missing patches.  We compute meta health per patch then average the changes between them as our statistic.
-- `"champion"`: This represents what champion a player picked.  Notably rows 11 and 12 per game are null as these just store
-  bans
+- `"gameid"`: A unique id for every game played.  this is useful because each game has 10 players, but there are actually 12 rows per game, so knowing the game id helps us parse the actual unique characters.
+- `"patch"`: This is a float representing what version of the game the competition is played on, ranging from 13.01 to 13.21 with some missing patches.  We compute meta health per patch then average the changes between them as our statistic.
+- `"champion"`: This represents what champion a player picked.  Notably rows 11 and 12 per game are null as these just store bans
 - `"ban1"`: This is the first champion banned by each team, and is the same for rows 1-5 and 6-10 per game.
 - `"ban2"`: Same as `"ban1"` but for the second ban.
 - `"ban3"`: Same as `"ban1"` but for the third ban.
@@ -37,7 +33,7 @@ tournaments throughout the year.  The dataset has many columns about various gam
 
 Notably we don't store the result of the games, as we don't care which characters are winning and losing, just that characters are being represented.
 
-here is one game from the dataset, note how the champions are arranged.
+Here is one game from the dataset; note how the champions are arranged.
 
 | gameid                |   patch | champion   | ban1   | ban2    | ban3   | ban4   | ban5   |
 |:----------------------|--------:|:-----------|:-------|:--------|:-------|:-------|:-------|
@@ -60,15 +56,13 @@ In computing our test statistic later we will count the champions in rows 1-10, 
 
 <iframe src="assets/univariate.html" width=800 height=600 frameBorder=0></iframe>
 
-This graph shows the count of every champion in the dataset.  While the actual values aren't too important, it is relavent to see 
-that some champions see a lot more play than others.
+This graph shows the count of every champion in the dataset. While the actual values aren't too important, it is relevant to see that some champions see a lot more play than others.
 
 ### Bivariate Analysis:
 
 <iframe src="assets/bivariate.html" width=800 height=600 frameBorder=0></iframe>
 
-This graph shows the number of games played per patch.  This is useful in showing that the total number of games played thoughout the lifecycle of a season
-fluctuates, and could have an impact on our results.
+This graph shows the number of games played per patch. This is useful in showing that the total number of games played thoughout the lifecycle of a season fluctuates, and could have an impact on our results.
 
 ### Interesting Aggregate:
 
@@ -95,8 +89,7 @@ fluctuates, and could have an impact on our results.
 | Caitlyn      |     304 |     144 |      93 |      46 |       6 |       5 |       0 |       0 |      1 |       1 |       0 |       1 |       1 |       0 |       7 |       4 |       2 |      12 |      3 |       0 |
 | Camille      |     165 |      56 |      57 |      28 |       6 |       7 |       5 |       6 |     16 |      18 |       7 |      14 |       8 |       7 |       4 |       8 |       7 |       8 |      1 |       0 |
 
-This is the first 20 entries of champion picks per patch. It shows two interesting aspects of patches, first that some champions will see more picking throughout the season compared to others,
-and that others will fluctuate heavily throughout the season.
+This is the first 20 entries of champion picks per patch. It shows two interesting aspects of patches, first that some champions will see more picking throughout the season compared to others, and that others will fluctuate heavily throughout the season.
 
 ---
 
@@ -127,20 +120,14 @@ print(counts[['Quarter', 'Count']].head().to_markdown(index=False))
 ## Hypothesis Testing
 
 **Null Hypothesis:** The average change in meta health throughout a season zero.
-**Alternate Hypothesis:** The average change in meta health is negative.  This means the meta is getting healthier
-Throughout the season.
-**Test Statistic:** Our test statistic is the average change in meta health, calculated by finding what proportion of the
-meta the top 50 champions make up per patch, then averaging the difference between them.
+**Alternate Hypothesis:** The average change in meta health is negative. This means the meta is getting healthier throughout the season.
+**Test Statistic:** Our test statistic is the average change in meta health, calculated by finding what proportion of the meta the top 50 champions make up per patch, then averaging the difference between them.
 **Significance level:**  We chose a standard 0.05 or 5% significance
 **P-value:** 0.369
 - This was computed with 1000 simulations
 
 <iframe src="assets/p-val.html" width=800 height=600 frameBorder=0></iframe>
 
-**Conclusion:** We see here that our results were not significant, meaning we fail to reject the null and cannot say
-if riot is making the meta healthier throughout the season.  We would like to mention the observed average health change
-is slightly positive, implying metas actually get slighty more unhealthy as the season progresses.  As stated with our
-analysis this is not statistically relavent and is not proof of anything, though it could represent the force of
-players makign the meta less healthy as they figure out optimal strategies.
+**Conclusion:** We see here that our results were not significant, meaning we fail to reject the null and cannot say if riot is making the meta healthier throughout the season. We would like to mention the observed average health change is slightly positive, implying metas actually get slighty more unhealthy as the season progresses. As stated with our analysis this is not statistically relavent and is not proof of anything, though it could represent the force of players makign the meta less healthy as they figure out optimal strategies.
 
 ---
