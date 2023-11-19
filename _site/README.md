@@ -22,18 +22,18 @@ To conclude, we will be examining how a meta (the set of champions that is prese
 
 Our dataset given was a collection of tournament results across the year 2023, containing match information from many major tournaments throughout the year.  The dataset has many columns about various game stats, but we cut it down to:
 
-- `"gameid"`: A unique id for every game played.  this is useful because each game has 10 players, but there are actually 12 rows per game, so knowing the game id helps us parse the actual unique characters.
-- `"patch"`: This is a float representing what version of the game the competition is played on, ranging from 13.01 to 13.21 with some missing patches.  We compute meta health per patch then average the changes between them as our statistic.
-- `"champion"`: This represents what champion a player picked.  Notably rows 11 and 12 per game are null as these just store bans
+- `"gameid"`: A unique id for every game played. This is useful because each game has 10 players, but there are actually 12 rows per game (one for each team's overall stats). Thus, knowing the `gameid` helps us parse the actual unique characters.
+- `"patch"`: This is a float representing what version of the game the competition is played on, ranging from 13.01 to 13.21 with some missing patches. We compute meta health per `patch` then average the changes between them as our statistic.
+- `"champion"`: This represents what `champion` a player picked. Notably, the 11th and 12th row for every game are null as these just store overall team statistics and are not designed to store champion picks
 - `"ban1"`: This is the first champion banned by each team, and is the same for rows 1-5 and 6-10 per game.
-- `"ban2"`: Same as `"ban1"` but for the second ban.
-- `"ban3"`: Same as `"ban1"` but for the third ban.
-- `"ban4"`: Same as `"ban1"` but for the fourth ban.
-- `"ban5"`: Same as `"ban1"` but for the fifth ban.
+- `"ban2"`: Same as `ban1` but for the second ban.
+- `"ban3"`: Same as `ban1` but for the third ban.
+- `"ban4"`: Same as `ban1` but for the fourth ban.
+- `"ban5"`: Same as `ban1` but for the fifth ban.
 
-Notably we don't store the result of the games, as we don't care which characters are winning and losing, just that characters are being represented.
+Notably we don't store the result of the games, as we don't care which characters are winning and losing, just that characters are being represented. This is since being either chosen or ban reflects the professional teams' belief that a given character is strong.
 
-Here is one game from the dataset; note how the champions are arranged.
+Here is one game from the dataset; note how the champions are arranged with the 11th and 12th row show the overall team's bans in order, and do not have individual champion picks since they reflect the entire team.
 
 | gameid                |   patch | champion   | ban1   | ban2    | ban3   | ban4   | ban5   |
 |:----------------------|--------:|:-----------|:-------|:--------|:-------|:-------|:-------|
@@ -56,13 +56,13 @@ In computing our test statistic later we will count the champions in rows 1-10, 
 
 <iframe src="assets/univariate.html" width=800 height=600 frameBorder=0></iframe>
 
-This graph shows the count of every champion in the dataset. While the actual values aren't too important, it is relevant to see that some champions see a lot more play than others.
+This graph shows the count of every champion in the dataset. While the actual values aren't too important, it is relevant to see that some champions see a lot more play than others in the 2023 season.
 
 ### Bivariate Analysis:
 
 <iframe src="assets/bivariate.html" width=800 height=600 frameBorder=0></iframe>
 
-This graph shows the number of games played per patch. This is useful in showing that the total number of games played thoughout the lifecycle of a season fluctuates, and could have an impact on our results.
+This graph shows the number of games played per patch. This is useful in showing that the total number of games played thoughout the lifecycle of a season fluctuates, and could have an impact on our results as different patches have a different sample size.
 
 ### Interesting Aggregate:
 
@@ -89,7 +89,7 @@ This graph shows the number of games played per patch. This is useful in showing
 | Caitlyn      |     304 |     144 |      93 |      46 |       6 |       5 |       0 |       0 |      1 |       1 |       0 |       1 |       1 |       0 |       7 |       4 |       2 |      12 |      3 |       0 |
 | Camille      |     165 |      56 |      57 |      28 |       6 |       7 |       5 |       6 |     16 |      18 |       7 |      14 |       8 |       7 |       4 |       8 |       7 |       8 |      1 |       0 |
 
-This is the first 20 entries of champion picks per patch. It shows two interesting aspects of patches, first that some champions will see more picking throughout the season compared to others, and that others will fluctuate heavily throughout the season.
+This is the first 20 entries of champion picks per patch. It shows two interesting aspects of patches: first that some champions will see more picking throughout the season compared to others, and second that others will fluctuate heavily throughout the season.
 
 ---
 
@@ -98,8 +98,19 @@ This is the first 20 entries of champion picks per patch. It shows two interesti
 ### NMAR
 When looking at the data, we found that much of the missingness was tied to the `league` that recorded it. Some `league`'s didn't record stats, some didn't subclassify, and some formatted them differently. This would lead us to feel that there were mostly columns that were missing by design (MD), rather than not missing at random (NMAR). This is since given the name of a league, you can absolutely determine if data will be missing, since it was not recorded (by design) and not related to the value of the missing data itself.
 
-### MAR
+### MAR: `split` on `league`
+Since different `league`s will change how their tournament formats are run, they can change the names and amount of `split`s that they have over time. Thus, we were interested to see if `split` would be MAR on `league`, and ran a permutation test using TVD as our test statistic. We'll use the standard significance level of 0.05.
 
+<iframe src="assets/split_on_league.html" width=800 height=600 frameBorder=0></iframe>
+
+Our observed p-value we saw was 0.0, which is much below 0.05, indicating to us that a correlation (MAR) between the missingness of `split` and `league`.
+
+### MCAR: `ban1` on `result`
+While we noticed some bans were missing, we found that they were not significantly conditional on the results of a game, win or loss. To measure this, we ran a permutation test to see if there was a correlation between the the missingness of `ban1` and `result`, and used TVD for our test statistic. For this, we'll still use the standard significance level of 0.05.
+
+<iframe src="assets/ban1_on_result.html" width=800 height=600 frameBorder=0></iframe>
+
+The observed p-value we saw for our TVD was 0.59, which would be far too high for our significance level of 0.05. This indicates to us that there is no correlation (MCAR) between the missingness of `ban1` and `result`.
 
 
 
@@ -120,7 +131,7 @@ print(counts[['Quarter', 'Count']].head().to_markdown(index=False))
 ## Hypothesis Testing
 
 **Null Hypothesis:** The average change in meta health throughout a season zero.
-**Alternate Hypothesis:** The average change in meta health is negative. This means the meta is getting healthier throughout the season.
+**Alternate Hypothesis:** The average change in meta health is negative. This means the meta is getting healthier throughout the season, since the top 50 champions dominate less.
 **Test Statistic:** Our test statistic is the average change in meta health, calculated by finding what proportion of the meta the top 50 champions make up per patch, then averaging the difference between them.
 **Significance level:**  We chose a standard 0.05 or 5% significance
 **P-value:** 0.369
@@ -128,6 +139,4 @@ print(counts[['Quarter', 'Count']].head().to_markdown(index=False))
 
 <iframe src="assets/p-val.html" width=800 height=600 frameBorder=0></iframe>
 
-**Conclusion:** We see here that our results were not significant, meaning we fail to reject the null and cannot say if riot is making the meta healthier throughout the season. We would like to mention the observed average health change is slightly positive, implying metas actually get slighty more unhealthy as the season progresses. As stated with our analysis this is not statistically relavent and is not proof of anything, though it could represent the force of players makign the meta less healthy as they figure out optimal strategies.
-
----
+**Conclusion:** We see here that our results were not significant, meaning we fail to reject the null and cannot say if Riot Games' Balance team is making the meta healthier throughout the season. We would like to mention the observed average health change is slightly positive, implying metas actually get slighty more unhealthy as the season progresses. As stated with our analysis this is not statistically relavent and is not proof of anything. However, this could be representative of how players make the meta less healthy as they converge on what the optimal strategies are.
