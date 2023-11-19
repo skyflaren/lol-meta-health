@@ -4,25 +4,27 @@
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="/assets/css/style.css?v=d3b3bc79f960c1db24739082421589f9a46dfcd3">
+    <link rel="stylesheet" href="/assets/css/style.css?v=32d115347dd991b151d997a408029da8d21811de">
     <link rel="stylesheet" type="text/css" href="/assets/css/print.css" media="print">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Meta Health Analysis per Patch in Competitive League of Legends | lol-meta-health</title>
+<title>League Meta Health Analysis | An in-depth look at the per-patch meta health of competitive League of Legends</title>
 <meta name="generator" content="Jekyll v3.9.3" />
-<meta property="og:title" content="Meta Health Analysis per Patch in Competitive League of Legends" />
+<meta property="og:title" content="League Meta Health Analysis" />
 <meta property="og:locale" content="en_US" />
+<meta name="description" content="An in-depth look at the per-patch meta health of competitive League of Legends" />
+<meta property="og:description" content="An in-depth look at the per-patch meta health of competitive League of Legends" />
 <link rel="canonical" href="http://localhost:4000/" />
 <meta property="og:url" content="http://localhost:4000/" />
-<meta property="og:site_name" content="lol-meta-health" />
+<meta property="og:site_name" content="League Meta Health Analysis" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Meta Health Analysis per Patch in Competitive League of Legends" />
+<meta property="twitter:title" content="League Meta Health Analysis" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","headline":"Meta Health Analysis per Patch in Competitive League of Legends","name":"lol-meta-health","url":"http://localhost:4000/"}</script>
+{"@context":"https://schema.org","@type":"WebSite","description":"An in-depth look at the per-patch meta health of competitive League of Legends","headline":"League Meta Health Analysis","name":"League Meta Health Analysis","url":"http://localhost:4000/"}</script>
 <!-- End Jekyll SEO tag -->
 
     <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
@@ -43,8 +45,8 @@
       <div class="inner">
 
         <header>
-          <h1>Meta Health Analysis per Patch in Competitive League of Legends</h1>
-          <h2></h2>
+          <h1>League Meta Health Analysis</h1>
+          <h2>An in-depth look at the per-patch meta health of competitive League of Legends</h2>
         </header>
         <section id="downloads" class="clearfix">
           
@@ -52,29 +54,23 @@
         </section>
         <hr>
         <section id="main_content">
-          <h1 id="meta-health-analysis-per-patch-in-competitive-league-of-legends">Meta Health Analysis per Patch in Competitive League of Legends</h1>
+          <!-- # Meta Health Analysis per Patch in Competitive League of Legends -->
 
 <p>by Lukas Fullner (lfullner@ucsd.edu) and Justin Lu (jzlu@ucsd.edu)</p>
 
-<hr />
-
 <h2 id="introduction">Introduction</h2>
 
-<p>This study looks into the idea of a “meta” and its health in the competitive video game scene of League of Legends. More specifically, are the patch updates that Riot Games (the game developer) publishes making the meta healthier?.</p>
+<p>This study looks into the idea of a “meta” and its health in the competitive video game scene of League of Legends. More specifically, are the patch updates that Riot Games (the game developer) publishes making the meta healthier?</p>
 
-<p>Just like how different athletes have different strengths in sports, different (champions) with unique capabilities have different relative strengths to one another in esports. In competitive games, players have many choices to make even before they play a game. When there are many such choices presented to players, they will try to find the best option which will give them the greatest chance to win. This leads to a “Meta” (or Most efficient tactic available), which is a term referring to the best options available to a player.</p>
+<p>Just like how different athletes have different strengths in physical sports, “champions” with unique capabilities have different relative strengths to one another in esports. In League of Legends, each player chooses one champion to play, which is often oe of the most influential choices they can make. Naturally, players will try to find the best champion at any given time in order to give them the greatest chance to win. This leads to a “meta” (or “most efficient tactic available”), which is a term referring to the best options available to a player. Our goal with this project was to answer the question of how healthy the meta is, but how does one even define meta health?</p>
 
-<p>Currently, there are 165 champions to pick from, where some must be better than others. League of Legends complicates this further by adding a banning system, where players alternate between banning a character from being played in that game to picking the character they want to play. Our goal with this project was to answer the question of how healthy the meta is, but how does one even define meta health?</p>
+<p>In professional play, teams of 5 players each must take turns choosing their champions, where only one team can pick any given champion out of the 165 total available. In this process called a “draft”, each team can also ban 5 champions, meaning both teams cannot pick them. Teams take turns picking and banning, ultimately resulting in 10 unique champions chosen and 10 unique champions banned.</p>
 
-<p>In the game League of Legends, professional teams of 5 players each must draft on champion per player. In this process called a “draft”, each team can also ban 5 champions that both  teams cannot pick. Teams take turns picking and banning, ultimately resulting in 10 unique champions chosen and 10 unique champions banned. When a champion is either picked or banned, players will say it was “present,” and when they are often present, players will say a champion has high “presence.”</p>
-
-<p>We chose to define it as: a healthy meta is one where the largest quantity of characters available are viable for play. We can determine this figure by using a stat called “meta presence”, which represents how often a character appears both being picked and banned. More specifically we computed this term by counting every occurance of a character in a given period, then dividing that by the total number of character occurances in that time period.</p>
+<p>Thus, we chose to define our statistic as: a healthy meta is one where the largest quantity of characters are seen as strong enough for professinal play. We can determine this figure by using “meta presence”, which represents how often a character appears as either picked and banned. More specifically we computed this term by counting every occurance of a character in a given period, then dividing that by the total number of characters picked and banned in that time period.</p>
 
 <p>So what time period are we using? Every year, Riot Games (the game developer) will monitor the relative strength of each character, and tune their abilities to hopefully be more in line with the others, aka keeping the meta healthy. To both accomplish their goal of consistent maintenance, but also not change things so fast that players can’t keep up, they “patch” the game about once every 2-3 weeks. During this time, players adapt and learn the new changes, and try to reestablish what the strongest champion picks are.</p>
 
-<p>When players refer to the “meta” of a game, they generally are referring to the champions which have the highest relative strength during the current round of champion strength adjustments (also called a “patch”).</p>
-
-<p>In this study, we will examine how “healthy” a meta is, which we define as one where most champions are at a balanced relative strength level. To measure this, we will say that a meta is healthy when many champions are present in professional drafts.</p>
+<p>To conclude, we will be examining how a meta (the set of champions that is present in professional play) evolve in a year, and whether they become “healthier” (more champion diversity) throughout that time, broken up by each “patch”.</p>
 
 <hr />
 
@@ -821,7 +817,7 @@ players makign the meta less healthy as they figure out optimal strategies.</p>
 
         <footer>
         
-          lol-meta-health is maintained by <a href="https://github.com/skyflaren">skyflaren</a><br>
+          League Meta Health Analysis is maintained by <a href="https://github.com/skyflaren">skyflaren</a><br>
         
           This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.
         </footer>
