@@ -4,7 +4,7 @@
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="/assets/css/style.css?v=384e18f09e4d247c076f6709662efcc263d37903">
+    <link rel="stylesheet" href="/assets/css/style.css?v=8bf59b40b08410cf900e677905a7fd8d1bfe252e">
     <link rel="stylesheet" type="text/css" href="/assets/css/print.css" media="print">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -746,7 +746,57 @@
 <p>When looking at the data, we found that much of the missingness was tied to the <code class="language-plaintext highlighter-rouge">league</code> that recorded it. Some <code class="language-plaintext highlighter-rouge">league</code>’s didn’t record stats, some didn’t subclassify, and some formatted them differently. This would lead us to feel that there were mostly columns that were missing by design (MD), rather than not missing at random (NMAR). This is since given the name of a league, you can absolutely determine if data will be missing, since it was not recorded (by design) and not related to the value of the missing data itself.</p>
 
 <h3 id="mar-split-on-league">MAR: <code class="language-plaintext highlighter-rouge">split</code> on <code class="language-plaintext highlighter-rouge">league</code></h3>
-<p>Since different <code class="language-plaintext highlighter-rouge">league</code>s will change how their tournament formats are run, they can change the names and amount of <code class="language-plaintext highlighter-rouge">split</code>s that they have over time. Thus, we were interested to see if <code class="language-plaintext highlighter-rouge">split</code> would be MAR on <code class="language-plaintext highlighter-rouge">league</code>, and ran a permutation test using TVD as our test statistic. We’ll use the standard significance level of 0.05.</p>
+<p>Since different <code class="language-plaintext highlighter-rouge">league</code>s will change how their tournament formats are run, they can change the names and amount of <code class="language-plaintext highlighter-rouge">split</code>s that they have over time.</p>
+
+<p>For example, the <code class="language-plaintext highlighter-rouge">league</code> called <code class="language-plaintext highlighter-rouge">LFL2</code> changed their labelling throughout the season:</p>
+
+<hr />
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">gameid</th>
+      <th style="text-align: left">league</th>
+      <th style="text-align: left">split</th>
+      <th style="text-align: left">date</th>
+      <th style="text-align: right">patch</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: left">LFL2</td>
+      <td style="text-align: left">Spring</td>
+      <td style="text-align: left">2023-01-10 17:07:16</td>
+      <td style="text-align: right">13.01</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: left">LFL2</td>
+      <td style="text-align: left">Spring</td>
+      <td style="text-align: left">2023-01-10 17:07:16</td>
+      <td style="text-align: right">13.01</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT04_2697714</td>
+      <td style="text-align: left">LFL2</td>
+      <td style="text-align: left">nan</td>
+      <td style="text-align: left">2023-09-15 19:57:10</td>
+      <td style="text-align: right">13.17</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT04_2697714</td>
+      <td style="text-align: left">LFL2</td>
+      <td style="text-align: left">nan</td>
+      <td style="text-align: left">2023-09-15 19:57:10</td>
+      <td style="text-align: right">13.17</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>Thus, we were interested to see if <code class="language-plaintext highlighter-rouge">split</code> would be MAR on <code class="language-plaintext highlighter-rouge">league</code>, and ran a permutation test using TVD as our test statistic. We’ll use the standard significance level of 0.05.</p>
 
 <iframe src="assets/split_on_league.html" width="800" height="600" frameborder="0"></iframe>
 
@@ -758,40 +808,6 @@
 <iframe src="assets/ban1_on_result.html" width="800" height="600" frameborder="0"></iframe>
 
 <p>The observed p-value we saw for our TVD was 0.59, which would be far too high for our significance level of 0.05. This indicates to us that there is no correlation (MCAR) between the missingness of <code class="language-plaintext highlighter-rouge">ban1</code> and <code class="language-plaintext highlighter-rouge">result</code>.</p>
-
-<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">counts</span><span class="p">[[</span><span class="s">'Quarter'</span><span class="p">,</span> <span class="s">'Count'</span><span class="p">]].</span><span class="n">head</span><span class="p">().</span><span class="n">to_markdown</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
-</code></pre></div></div>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">Quarter</th>
-      <th style="text-align: right">Count</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">Fall 2020</td>
-      <td style="text-align: right">3</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Winter 2021</td>
-      <td style="text-align: right">2</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Spring 2021</td>
-      <td style="text-align: right">6</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Summer 2021</td>
-      <td style="text-align: right">4</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Fall 2021</td>
-      <td style="text-align: right">55</td>
-    </tr>
-  </tbody>
-</table>
 
 <hr />
 

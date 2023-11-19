@@ -99,7 +99,22 @@ This is the first 20 entries of champion picks per patch. It shows two interesti
 When looking at the data, we found that much of the missingness was tied to the `league` that recorded it. Some `league`'s didn't record stats, some didn't subclassify, and some formatted them differently. This would lead us to feel that there were mostly columns that were missing by design (MD), rather than not missing at random (NMAR). This is since given the name of a league, you can absolutely determine if data will be missing, since it was not recorded (by design) and not related to the value of the missing data itself.
 
 ### MAR: `split` on `league`
-Since different `league`s will change how their tournament formats are run, they can change the names and amount of `split`s that they have over time. Thus, we were interested to see if `split` would be MAR on `league`, and ran a permutation test using TVD as our test statistic. We'll use the standard significance level of 0.05.
+Since different `league`s will change how their tournament formats are run, they can change the names and amount of `split`s that they have over time. 
+
+For example, the `league` called `LFL2` changed their labelling throughout the season:
+
+---
+
+| gameid                | league   | split   | date                |   patch |
+|:----------------------|:---------|:--------|:--------------------|--------:|
+| ESPORTSTMNT06_2753012 | LFL2     | Spring  | 2023-01-10 17:07:16 |   13.01 |
+| ESPORTSTMNT06_2753012 | LFL2     | Spring  | 2023-01-10 17:07:16 |   13.01 |
+| ESPORTSTMNT04_2697714 | LFL2     | nan     | 2023-09-15 19:57:10 |   13.17 |
+| ESPORTSTMNT04_2697714 | LFL2     | nan     | 2023-09-15 19:57:10 |   13.17 |
+
+---
+
+Thus, we were interested to see if `split` would be MAR on `league`, and ran a permutation test using TVD as our test statistic. We'll use the standard significance level of 0.05.
 
 <iframe src="assets/split_on_league.html" width=800 height=600 frameBorder=0></iframe>
 
@@ -111,20 +126,6 @@ While we noticed some bans were missing, we found that they were not significant
 <iframe src="assets/ban1_on_result.html" width=800 height=600 frameBorder=0></iframe>
 
 The observed p-value we saw for our TVD was 0.59, which would be far too high for our significance level of 0.05. This indicates to us that there is no correlation (MCAR) between the missingness of `ban1` and `result`.
-
-
-
-```py
-print(counts[['Quarter', 'Count']].head().to_markdown(index=False))
-```
-
-| Quarter     |   Count |
-|:------------|--------:|
-| Fall 2020   |       3 |
-| Winter 2021 |       2 |
-| Spring 2021 |       6 |
-| Summer 2021 |       4 |
-| Fall 2021   |      55 |
 
 ---
 
