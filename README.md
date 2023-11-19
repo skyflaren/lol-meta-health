@@ -29,7 +29,6 @@ When players refer to the "meta" of a game, they generally are referring to the 
 
 In this study, we will examine how "healthy" a meta is, which we define as one where most champions are at a balanced relative strength level. To measure this, we will say that a meta is healthy when many champions are present in professional drafts.
 
->>>>>>> Stashed changes
 ---
 
 ## Cleaning and EDA
