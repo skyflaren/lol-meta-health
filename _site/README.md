@@ -6,10 +6,15 @@ by Lukas Fullner (lfullner@ucsd.edu) and Justin Lu (jzlu@ucsd.edu)
 
 ## Introduction
 
+This study looks into the idea of a "meta" and its health in the competitive video game scene of League of Legends. More specifically, are the patch updates that Riot Games (the game developer) publishes making the meta healthier?. 
 
-In competitive games players have many choices to make even before they play a game, from character selection to picking a loadout. When there are choices presented to players, they will try to find the best option which will give them the greatest chance to win. This leads to a "Meta" (or Most efficient tactic available), which is a term referring to the best options available to a player.
+Just like how different athletes have different strengths in sports, different (champions) with unique capabilities have different relative strengths to one another in esports. In competitive games, players have many choices to make even before they play a game. When there are many such choices presented to players, they will try to find the best option which will give them the greatest chance to win. This leads to a "Meta" (or Most efficient tactic available), which is a term referring to the best options available to a player.
 
-In League of Legends the most important choice is what champion you pick, with there being currently 165 champions to pick from some must be better than others. League of Legends complicates this further by adding a banning system, where players alternate between banning a character from being played in that game to picking the character they want to play. Our goal with this project was to answer the question of how healthy the meta is, but how does one even define meta health?  
+Currently, there are 165 champions to pick from, where some must be better than others. League of Legends complicates this further by adding a banning system, where players alternate between banning a character from being played in that game to picking the character they want to play. Our goal with this project was to answer the question of how healthy the meta is, but how does one even define meta health?  
+
+In the game League of Legends, professional teams of 5 players each must draft on champion per player. In this process called a "draft", each team can also ban 5 champions that both  teams cannot pick. Teams take turns picking and banning, ultimately resulting in 10 unique champions chosen and 10 unique champions banned. When a champion is either picked or banned, players will say it was "present," and when they are often present, players will say a champion has high "presence." 
+
+
 
 We chose to define it as: a healthy meta is one where the largest quantity of characters available are viable for play. We can determine this figure by using a stat called "meta presence", which represents how often a character appears both being picked and banned. More specifically we computed this term by counting every occurance of a character in a given period, then dividing that by the total number of character occurances in that time period.
 
@@ -19,11 +24,7 @@ So what time period are we using? Every year, Riot Games (the game developer) wi
 
 
 
-This study looks into the idea of a "meta" and its health in the competitive video game scene of League of Legends. More specifically, are the patch updates that Riot Games (the game developer) publishes making the meta healthier?.  l,
 
-Just like how different athletes have different strengths in sports, different (champions) with unique capabilities have different relative strengths to one another in esports. 
-
-In the game League of Legends, professional teams of 5 players each must draft on champion per player. In this process called a "draft", each team can also ban 5 champions that both  teams cannot pick. Teams take turns picking and banning, ultimately resulting in 10 unique champions chosen and 10 unique champions banned. When a champion is either picked or banned, players will say it was "present," and when they are often present, players will say a champion has high "presence."
 
 When players refer to the "meta" of a game, they generally are referring to the champions which have the highest relative strength during the current round of champion strength adjustments (also called a "patch").
 

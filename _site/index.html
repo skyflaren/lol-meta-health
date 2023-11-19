@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/assets/css/style.css?v=d3b3bc79f960c1db24739082421589f9a46dfcd3">
+    <link rel="stylesheet" type="text/css" href="/assets/css/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Meta Health Analysis per Patch in Competitive League of Legends | lol-meta-health</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Meta Health Analysis per Patch in Competitive League of Legends" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="lol-meta-health" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Meta Health Analysis per Patch in Competitive League of Legends" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","headline":"Meta Health Analysis per Patch in Competitive League of Legends","name":"lol-meta-health","url":"http://localhost:4000/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Meta Health Analysis per Patch in Competitive League of Legends</h1>
+          <h2></h2>
+        </header>
+        <section id="downloads" class="clearfix">
+          
+	
+        </section>
+        <hr>
+        <section id="main_content">
+          <h1 id="meta-health-analysis-per-patch-in-competitive-league-of-legends">Meta Health Analysis per Patch in Competitive League of Legends</h1>
+
+<p>by Lukas Fullner (lfullner@ucsd.edu) and Justin Lu (jzlu@ucsd.edu)</p>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<p>This study looks into the idea of a “meta” and its health in the competitive video game scene of League of Legends. More specifically, are the patch updates that Riot Games (the game developer) publishes making the meta healthier?.</p>
+
+<p>Just like how different athletes have different strengths in sports, different (champions) with unique capabilities have different relative strengths to one another in esports. In competitive games, players have many choices to make even before they play a game. When there are many such choices presented to players, they will try to find the best option which will give them the greatest chance to win. This leads to a “Meta” (or Most efficient tactic available), which is a term referring to the best options available to a player.</p>
+
+<p>Currently, there are 165 champions to pick from, where some must be better than others. League of Legends complicates this further by adding a banning system, where players alternate between banning a character from being played in that game to picking the character they want to play. Our goal with this project was to answer the question of how healthy the meta is, but how does one even define meta health?</p>
+
+<p>In the game League of Legends, professional teams of 5 players each must draft on champion per player. In this process called a “draft”, each team can also ban 5 champions that both  teams cannot pick. Teams take turns picking and banning, ultimately resulting in 10 unique champions chosen and 10 unique champions banned. When a champion is either picked or banned, players will say it was “present,” and when they are often present, players will say a champion has high “presence.”</p>
+
+<p>We chose to define it as: a healthy meta is one where the largest quantity of characters available are viable for play. We can determine this figure by using a stat called “meta presence”, which represents how often a character appears both being picked and banned. More specifically we computed this term by counting every occurance of a character in a given period, then dividing that by the total number of character occurances in that time period.</p>
+
+<p>So what time period are we using? Every year, Riot Games (the game developer) will monitor the relative strength of each character, and tune their abilities to hopefully be more in line with the others, aka keeping the meta healthy. To both accomplish their goal of consistent maintenance, but also not change things so fast that players can’t keep up, they “patch” the game about once every 2-3 weeks. During this time, players adapt and learn the new changes, and try to reestablish what the strongest champion picks are.</p>
+
+<p>When players refer to the “meta” of a game, they generally are referring to the champions which have the highest relative strength during the current round of champion strength adjustments (also called a “patch”).</p>
+
+<p>In this study, we will examine how “healthy” a meta is, which we define as one where most champions are at a balanced relative strength level. To measure this, we will say that a meta is healthy when many champions are present in professional drafts.</p>
+
+<hr />
+
+<h2 id="cleaning-and-eda">Cleaning and EDA</h2>
+
+<p>Our dataset given was a collection of tournament results across the year 2023, containing match information from many major
+tournaments throughout the year.  The dataset has many columns about various game stats, but we cut it down to:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">"gameid"</code>: A unique id for every game played.  this is useful because each game has 10 players, but there are actually
+12 rows per game, so knowing the game id helps us parse the actual unique characters.</li>
+  <li><code class="language-plaintext highlighter-rouge">"patch"</code>: This is a float representing what version of the game the competition is played on, ranging from 13.01 to 13.21
+with some missing patches.  We compute meta health per patch then average the changes between them as our statistic.</li>
+  <li><code class="language-plaintext highlighter-rouge">"champion"</code>: This represents what champion a player picked.  Notably rows 11 and 12 per game are null as these just store
+bans</li>
+  <li><code class="language-plaintext highlighter-rouge">"ban1"</code>: This is the first champion banned by each team, and is the same for rows 1-5 and 6-10 per game.</li>
+  <li><code class="language-plaintext highlighter-rouge">"ban2"</code>: Same as <code class="language-plaintext highlighter-rouge">"ban1"</code> but for the second ban.</li>
+  <li><code class="language-plaintext highlighter-rouge">"ban3"</code>: Same as <code class="language-plaintext highlighter-rouge">"ban1"</code> but for the third ban.</li>
+  <li><code class="language-plaintext highlighter-rouge">"ban4"</code>: Same as <code class="language-plaintext highlighter-rouge">"ban1"</code> but for the fourth ban.</li>
+  <li><code class="language-plaintext highlighter-rouge">"ban5"</code>: Same as <code class="language-plaintext highlighter-rouge">"ban1"</code> but for the fifth ban.</li>
+</ul>
+
+<p>Notably we don’t store the result of the games, as we don’t care which characters are winning and losing, just that characters are being represented.</p>
+
+<p>here is one game from the dataset, note how the champions are arranged.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">gameid</th>
+      <th style="text-align: right">patch</th>
+      <th style="text-align: left">champion</th>
+      <th style="text-align: left">ban1</th>
+      <th style="text-align: left">ban2</th>
+      <th style="text-align: left">ban3</th>
+      <th style="text-align: left">ban4</th>
+      <th style="text-align: left">ban5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: right">13.01</td>
+      <td style="text-align: left">Jax</td>
+      <td style="text-align: left">Sylas</td>
+      <td style="text-align: left">Caitlyn</td>
+      <td style="text-align: left">Wukong</td>
+      <td style="text-align: left">Akali</td>
+      <td style="text-align: left">Yone</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: right">13.01</td>
+      <td style="text-align: left">Poppy</td>
+      <td style="text-align: left">Sylas</td>
+      <td style="text-align: left">Caitlyn</td>
+      <td style="text-align: left">Wukong</td>
+      <td style="text-align: left">Akali</td>
+      <td style="text-align: left">Yone</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: right">13.01</td>
+      <td style="text-align: left">Taliyah</td>
+      <td style="text-align: left">Sylas</td>
+      <td style="text-align: left">Caitlyn</td>
+      <td style="text-align: left">Wukong</td>
+      <td style="text-align: left">Akali</td>
+      <td style="text-align: left">Yone</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: right">13.01</td>
+      <td style="text-align: left">Ezreal</td>
+      <td style="text-align: left">Sylas</td>
+      <td style="text-align: left">Caitlyn</td>
+      <td style="text-align: left">Wukong</td>
+      <td style="text-align: left">Akali</td>
+      <td style="text-align: left">Yone</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: right">13.01</td>
+      <td style="text-align: left">Karma</td>
+      <td style="text-align: left">Sylas</td>
+      <td style="text-align: left">Caitlyn</td>
+      <td style="text-align: left">Wukong</td>
+      <td style="text-align: left">Akali</td>
+      <td style="text-align: left">Yone</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: right">13.01</td>
+      <td style="text-align: left">Sejuani</td>
+      <td style="text-align: left">Galio</td>
+      <td style="text-align: left">Lucian</td>
+      <td style="text-align: left">Fiora</td>
+      <td style="text-align: left">Viktor</td>
+      <td style="text-align: left">Azir</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: right">13.01</td>
+      <td style="text-align: left">Viego</td>
+      <td style="text-align: left">Galio</td>
+      <td style="text-align: left">Lucian</td>
+      <td style="text-align: left">Fiora</td>
+      <td style="text-align: left">Viktor</td>
+      <td style="text-align: left">Azir</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: right">13.01</td>
+      <td style="text-align: left">Syndra</td>
+      <td style="text-align: left">Galio</td>
+      <td style="text-align: left">Lucian</td>
+      <td style="text-align: left">Fiora</td>
+      <td style="text-align: left">Viktor</td>
+      <td style="text-align: left">Azir</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: right">13.01</td>
+      <td style="text-align: left">Zeri</td>
+      <td style="text-align: left">Galio</td>
+      <td style="text-align: left">Lucian</td>
+      <td style="text-align: left">Fiora</td>
+      <td style="text-align: left">Viktor</td>
+      <td style="text-align: left">Azir</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: right">13.01</td>
+      <td style="text-align: left">Yuumi</td>
+      <td style="text-align: left">Galio</td>
+      <td style="text-align: left">Lucian</td>
+      <td style="text-align: left">Fiora</td>
+      <td style="text-align: left">Viktor</td>
+      <td style="text-align: left">Azir</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: right">13.01</td>
+      <td style="text-align: left">nan</td>
+      <td style="text-align: left">Sylas</td>
+      <td style="text-align: left">Caitlyn</td>
+      <td style="text-align: left">Wukong</td>
+      <td style="text-align: left">Akali</td>
+      <td style="text-align: left">Yone</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ESPORTSTMNT06_2753012</td>
+      <td style="text-align: right">13.01</td>
+      <td style="text-align: left">nan</td>
+      <td style="text-align: left">Galio</td>
+      <td style="text-align: left">Lucian</td>
+      <td style="text-align: left">Fiora</td>
+      <td style="text-align: left">Viktor</td>
+      <td style="text-align: left">Azir</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>In computing our test statistic later we will count the champions in rows 1-10, then all the bans from rows 11 and 12.</p>
+
+<h3 id="univariate-analysis">Univariate Analysis:</h3>
+
+<iframe src="assets/univariate.html" width="800" height="600" frameborder="0"></iframe>
+
+<p>This graph shows the count of every champion in the dataset.  While the actual values aren’t too important, it is relavent to see 
+that some champions see a lot more play than others.</p>
+
+<h3 id="bivariate-analysis">Bivariate Analysis:</h3>
+
+<iframe src="assets/bivariate.html" width="800" height="600" frameborder="0"></iframe>
+
+<p>This graph shows the number of games played per patch.  This is useful in showing that the total number of games played thoughout the lifecycle of a season
+fluctuates, and could have an impact on our results.</p>
+
+<h3 id="interesting-aggregate">Interesting Aggregate:</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">champion</th>
+      <th style="text-align: right">13.01</th>
+      <th style="text-align: right">13.03</th>
+      <th style="text-align: right">13.04</th>
+      <th style="text-align: right">13.05</th>
+      <th style="text-align: right">13.06</th>
+      <th style="text-align: right">13.07</th>
+      <th style="text-align: right">13.08</th>
+      <th style="text-align: right">13.09</th>
+      <th style="text-align: right">13.1</th>
+      <th style="text-align: right">13.11</th>
+      <th style="text-align: right">13.12</th>
+      <th style="text-align: right">13.13</th>
+      <th style="text-align: right">13.14</th>
+      <th style="text-align: right">13.15</th>
+      <th style="text-align: right">13.16</th>
+      <th style="text-align: right">13.17</th>
+      <th style="text-align: right">13.18</th>
+      <th style="text-align: right">13.19</th>
+      <th style="text-align: right">13.2</th>
+      <th style="text-align: right">13.21</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Aatrox</td>
+      <td style="text-align: right">65</td>
+      <td style="text-align: right">17</td>
+      <td style="text-align: right">19</td>
+      <td style="text-align: right">18</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">10</td>
+      <td style="text-align: right">19</td>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">17</td>
+      <td style="text-align: right">221</td>
+      <td style="text-align: right">30</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">11</td>
+      <td style="text-align: right">63</td>
+      <td style="text-align: right">11</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Ahri</td>
+      <td style="text-align: right">85</td>
+      <td style="text-align: right">40</td>
+      <td style="text-align: right">124</td>
+      <td style="text-align: right">214</td>
+      <td style="text-align: right">88</td>
+      <td style="text-align: right">56</td>
+      <td style="text-align: right">120</td>
+      <td style="text-align: right">27</td>
+      <td style="text-align: right">188</td>
+      <td style="text-align: right">366</td>
+      <td style="text-align: right">224</td>
+      <td style="text-align: right">193</td>
+      <td style="text-align: right">169</td>
+      <td style="text-align: right">51</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">45</td>
+      <td style="text-align: right">22</td>
+      <td style="text-align: right">46</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Akali</td>
+      <td style="text-align: right">333</td>
+      <td style="text-align: right">131</td>
+      <td style="text-align: right">107</td>
+      <td style="text-align: right">75</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">11</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">9</td>
+      <td style="text-align: right">44</td>
+      <td style="text-align: right">44</td>
+      <td style="text-align: right">44</td>
+      <td style="text-align: right">17</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">38</td>
+      <td style="text-align: right">11</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Akshan</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Alistar</td>
+      <td style="text-align: right">43</td>
+      <td style="text-align: right">37</td>
+      <td style="text-align: right">32</td>
+      <td style="text-align: right">25</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">18</td>
+      <td style="text-align: right">18</td>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">16</td>
+      <td style="text-align: right">22</td>
+      <td style="text-align: right">209</td>
+      <td style="text-align: right">258</td>
+      <td style="text-align: right">230</td>
+      <td style="text-align: right">109</td>
+      <td style="text-align: right">12</td>
+      <td style="text-align: right">73</td>
+      <td style="text-align: right">57</td>
+      <td style="text-align: right">96</td>
+      <td style="text-align: right">10</td>
+      <td style="text-align: right">3</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Amumu</td>
+      <td style="text-align: right">82</td>
+      <td style="text-align: right">41</td>
+      <td style="text-align: right">23</td>
+      <td style="text-align: right">14</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">9</td>
+      <td style="text-align: right">14</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">38</td>
+      <td style="text-align: right">34</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Anivia</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Annie</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">215</td>
+      <td style="text-align: right">258</td>
+      <td style="text-align: right">182</td>
+      <td style="text-align: right">40</td>
+      <td style="text-align: right">29</td>
+      <td style="text-align: right">56</td>
+      <td style="text-align: right">17</td>
+      <td style="text-align: right">145</td>
+      <td style="text-align: right">316</td>
+      <td style="text-align: right">219</td>
+      <td style="text-align: right">94</td>
+      <td style="text-align: right">32</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Aphelios</td>
+      <td style="text-align: right">67</td>
+      <td style="text-align: right">63</td>
+      <td style="text-align: right">322</td>
+      <td style="text-align: right">307</td>
+      <td style="text-align: right">45</td>
+      <td style="text-align: right">70</td>
+      <td style="text-align: right">148</td>
+      <td style="text-align: right">39</td>
+      <td style="text-align: right">297</td>
+      <td style="text-align: right">696</td>
+      <td style="text-align: right">364</td>
+      <td style="text-align: right">223</td>
+      <td style="text-align: right">132</td>
+      <td style="text-align: right">26</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">10</td>
+      <td style="text-align: right">12</td>
+      <td style="text-align: right">69</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">2</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Ashe</td>
+      <td style="text-align: right">423</td>
+      <td style="text-align: right">143</td>
+      <td style="text-align: right">110</td>
+      <td style="text-align: right">42</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">14</td>
+      <td style="text-align: right">130</td>
+      <td style="text-align: right">178</td>
+      <td style="text-align: right">62</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">12</td>
+      <td style="text-align: right">31</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Aurelion Sol</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">76</td>
+      <td style="text-align: right">50</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">12</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Azir</td>
+      <td style="text-align: right">518</td>
+      <td style="text-align: right">186</td>
+      <td style="text-align: right">147</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">201</td>
+      <td style="text-align: right">286</td>
+      <td style="text-align: right">327</td>
+      <td style="text-align: right">273</td>
+      <td style="text-align: right">74</td>
+      <td style="text-align: right">10</td>
+      <td style="text-align: right">33</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">96</td>
+      <td style="text-align: right">9</td>
+      <td style="text-align: right">3</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Bard</td>
+      <td style="text-align: right">9</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Bel’Veth</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">16</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">22</td>
+      <td style="text-align: right">13</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">10</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Blitzcrank</td>
+      <td style="text-align: right">29</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">44</td>
+      <td style="text-align: right">74</td>
+      <td style="text-align: right">25</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">25</td>
+      <td style="text-align: right">9</td>
+      <td style="text-align: right">24</td>
+      <td style="text-align: right">76</td>
+      <td style="text-align: right">80</td>
+      <td style="text-align: right">54</td>
+      <td style="text-align: right">29</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">18</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Brand</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Braum</td>
+      <td style="text-align: right">82</td>
+      <td style="text-align: right">56</td>
+      <td style="text-align: right">46</td>
+      <td style="text-align: right">50</td>
+      <td style="text-align: right">30</td>
+      <td style="text-align: right">11</td>
+      <td style="text-align: right">22</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">39</td>
+      <td style="text-align: right">63</td>
+      <td style="text-align: right">117</td>
+      <td style="text-align: right">195</td>
+      <td style="text-align: right">124</td>
+      <td style="text-align: right">29</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">22</td>
+      <td style="text-align: right">16</td>
+      <td style="text-align: right">26</td>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Briar</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Caitlyn</td>
+      <td style="text-align: right">304</td>
+      <td style="text-align: right">144</td>
+      <td style="text-align: right">93</td>
+      <td style="text-align: right">46</td>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">12</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Camille</td>
+      <td style="text-align: right">165</td>
+      <td style="text-align: right">56</td>
+      <td style="text-align: right">57</td>
+      <td style="text-align: right">28</td>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">16</td>
+      <td style="text-align: right">18</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">14</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>This is the first 20 entries of champion picks per patch. It shows two interesting aspects of patches, first that some champions will see more picking throughout the season compared to others,
+and that others will fluctuate heavily throughout the season.</p>
+
+<hr />
+
+<h2 id="assessment-of-missingness">Assessment of Missingness</h2>
+
+<h3 id="nmar">NMAR</h3>
+<p>When looking at the data, we found that much of the missingness was tied to the <code class="language-plaintext highlighter-rouge">league</code> that recorded it. Some <code class="language-plaintext highlighter-rouge">league</code>’s didn’t record stats, some didn’t subclassify, and some formatted them differently. This would lead us to feel that there were mostly columns that were missing by design (MD), rather than not missing at random (NMAR). This is since given the name of a league, you can absolutely determine if data will be missing, since it was not recorded (by design) and not related to the value of the missing data itself.</p>
+
+<h3 id="mar">MAR</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">counts</span><span class="p">[[</span><span class="s">'Quarter'</span><span class="p">,</span> <span class="s">'Count'</span><span class="p">]].</span><span class="n">head</span><span class="p">().</span><span class="n">to_markdown</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Quarter</th>
+      <th style="text-align: right">Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Fall 2020</td>
+      <td style="text-align: right">3</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Winter 2021</td>
+      <td style="text-align: right">2</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Spring 2021</td>
+      <td style="text-align: right">6</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Summer 2021</td>
+      <td style="text-align: right">4</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Fall 2021</td>
+      <td style="text-align: right">55</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="hypothesis-testing">Hypothesis Testing</h2>
+
+<p><strong>Null Hypothesis:</strong> The average change in meta health throughout a season zero.
+<strong>Alternate Hypothesis:</strong> The average change in meta health is negative.  This means the meta is getting healthier
+Throughout the season.
+<strong>Test Statistic:</strong> Our test statistic is the average change in meta health, calculated by finding what proportion of the
+meta the top 50 champions make up per patch, then averaging the difference between them.
+<strong>Significance level:</strong>  We chose a standard 0.05 or 5% significance
+<strong>P-value:</strong> 0.369</p>
+<ul>
+  <li>This was computed with 1000 simulations</li>
+</ul>
+
+<iframe src="assets/p-val.html" width="800" height="600" frameborder="0"></iframe>
+
+<p><strong>Conclusion:</strong> We see here that our results were not significant, meaning we fail to reject the null and cannot say
+if riot is making the meta healthier throughout the season.  We would like to mention the observed average health change
+is slightly positive, implying metas actually get slighty more unhealthy as the season progresses.  As stated with our
+analysis this is not statistically relavent and is not proof of anything, though it could represent the force of
+players makign the meta less healthy as they figure out optimal strategies.</p>
+
+<hr />
+
+        </section>
+
+        <footer>
+        
+          lol-meta-health is maintained by <a href="https://github.com/skyflaren">skyflaren</a><br>
+        
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.
+        </footer>
+
+      </div>
+    </div>
+  </body>
+</html>
