@@ -1,5 +1,7 @@
 title: League Meta Health Analysis
 description: An in-depth look at the per-patch meta health of competitive League of Legends
+
+url: '/lol-meta-health'
 remote_theme: pages-themes/tactile@v0.2.0
 plugins:
 - jekyll-remote-theme
