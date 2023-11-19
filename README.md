@@ -140,6 +140,21 @@ print(counts[['Quarter', 'Count']].head().to_markdown(index=False))
 
 ## Hypothesis Testing
 
-Hello world!
+**Null Hypothesis:** The average change in meta health throughout a season zero.
+**Alternate Hypothesis:** The average change in meta health is negative.  This means the meta is getting healthier
+Throughout the season.
+**Test Statistic:** Our test statistic is the average change in meta health, calculated by finding what proportion of the
+meta the top 50 champions make up per patch, then averaging the difference between them.
+**Significance level:**  We chose a standard 0.05 or 5% significance
+**P-value:** 0.369
+- This was computed with 1000 simulations
+
+<iframe src="assets/p-val.html" width=800 height=600 frameBorder=0></iframe>
+
+**Conclusion:** We see here that our results were not significant, meaning we fail to reject the null and cannot say
+if riot is making the meta healthier throughout the season.  We would like to mention the observed average health change
+is slightly positive, implying metas actually get slighty more unhealthy as the season progresses.  As stated with our
+analysis this is not statistically relavent and is not proof of anything, though it could represent the force of
+players makign the meta less healthy as they figure out optimal strategies.
 
 ---
